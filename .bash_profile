@@ -447,7 +447,7 @@ Recon_all() {
         cat A.txt | $GOPATH/bin/httprobe -p http:80 -p http:443 http:8080 -p https:8443 | tee -a alive_URLs.txt
 
         # Search for subdomain take overs
-        $GOPATH/bin/nuclei -l alive_URLs.txt -t ~/tools/nuclei-templates/subdomain-takeover/detect-all-takeovers.yaml -o subdomain_takeover.txt
+        $GOPATH/bin/nuclei -l alive_URLs.txt -t $tools_path/nuclei-templates/subdomain-takeover/detect-all-takeovers.yaml -o subdomain_takeover.txt
 
         if [ ! -d "$2" ]
         then
