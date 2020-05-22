@@ -404,10 +404,10 @@ Recon_all() {
         echo -e "$purple[*] Example: Recon_all <domain name> <gowitness screenshot directory> ${color_off}"
     else
         #Run amass $1 for domains name
-        ~/go/bin/amass enum -passive -d $1 -o amass_subdomains.txt
+        $GOPATH/bin/amass enum -passive -d $1 -o amass_subdomains.txt
 
         #Run subfinder $1 is domain name
-        ~/go/bin/subfinder -d $1 -o subfinder_subdomains.txt
+        $GOPATH/bin/subfinder -d $1 -o subfinder_subdomains.txt
 
         # Merge subdomains
         cat amass_subdomains.txt subfinder_subdomains.txt >> unsorted_subdomains.txt
@@ -416,38 +416,38 @@ Recon_all() {
         sort -u unsorted_subdomains.txt -o subdomains.txt
 
         # Find A records (IPv4 addresses)
-        ~/go/bin/dnsprobe -l subdomains.txt -silent -r A -o A.txt
+        $GOPATH/bin/dnsprobe -l subdomains.txt -silent -r A -o A.txt
 
         # Find NS records
-        ~/go/bin/dnsprobe -l subdomains.txt -silent -r NS -o NS.txt
+        $GOPATH/bin/dnsprobe -l subdomains.txt -silent -r NS -o NS.txt
 
         # Find CNAME records
-        ~/go/bin/dnsprobe -l subdomains.txt -silent -r CNAME -o CNAME.txt
+        $GOPATH/bin/dnsprobe -l subdomains.txt -silent -r CNAME -o CNAME.txt
 
         # Find SOA records
-        ~/go/bin/dnsprobe -l subdomains.txt -silent -r SOA -o SOA.txt
+        $GOPATH/bin/dnsprobe -l subdomains.txt -silent -r SOA -o SOA.txt
 
         # Find PTR records
-        ~/go/bin/dnsprobe -l subdomains.txt -silent -r PTR -o PTR.txt
+        $GOPATH/bin/dnsprobe -l subdomains.txt -silent -r PTR -o PTR.txt
 
         # Find MX records
-        ~/go/bin/dnsprobe -l subdomains.txt -silent -r MX -o MX.txt
+        $GOPATH/bin/dnsprobe -l subdomains.txt -silent -r MX -o MX.txt
 
         # Find TXT records
-        ~/go/bin/dnsprobe -l subdomains.txt -silent -r TXT -o TXT.txt
+        $GOPATH/bin/dnsprobe -l subdomains.txt -silent -r TXT -o TXT.txt
 
         # Find AAAA records (ipv6 addresses)
-        ~/go/bin/dnsprobe -l subdomains.txt -silent -r AAAA -o AAAA.txt
+        $GOPATH/bin/dnsprobe -l subdomains.txt -silent -r AAAA -o AAAA.txt
 
         # DO TO 
         # run naabu
         # run shuffledns  
 
         #Run httprobe to find URLs
-        cat A.txt | ~/go/bin/httprobe -p http:80 -p http:443 http:8080 -p https:8443 | tee -a alive_URLs.txt
+        cat A.txt | $GOPATH/bin/httprobe -p http:80 -p http:443 http:8080 -p https:8443 | tee -a alive_URLs.txt
 
         # Search for subdomain take overs
-        ~/go/bin/nuclei -l alive_URLs.txt -t ~/tools/nuclei-templates/subdomain-takeover/detect-all-takeovers.yaml -o subdomain_takeover.txt
+        $GOPATH/bin/nuclei -l alive_URLs.txt -t ~/tools/nuclei-templates/subdomain-takeover/detect-all-takeovers.yaml -o subdomain_takeover.txt
 
         if [ ! -d "$2" ]
         then
@@ -456,11 +456,11 @@ Recon_all() {
             echo ""
         fi
         
-        ~/go/bin/gowitness file --source=alive_URLs.txt --threads=4 --resolution="1200,750" --log-format=json --log-level=warn --timeout=60 --destination="$2"
+        $GOPATH/bin/gowitness file --source=alive_URLs.txt --threads=4 --resolution="1200,750" --log-format=json --log-level=warn --timeout=60 --destination="$2"
 
         #gowitness report generate
         #This should result in an report.html file with a screenshot report where screenshots are sorted using perception hashing.
-        /go/bin/gowitness report generate --sort-perception
+        $GOPATH/bin/gowitness report generate --sort-perception
 
     fi
 }
@@ -471,7 +471,7 @@ Recon_subdomain_takeover() {
     then
         echo -e "$purple[*] Example: Recon_subdomain_takeover <domain name> ${color_off}"
     else
-        ~/go/bin/subfinder -d $1 | ~/go/bin/dnsprobe -silent -f domain | ~/go/bin/httprobe | ~/go/bin/nuclei -t ~/tools/nuclei-templates/subdomain-takeover/detect-all-takeovers.yaml
+        $GOPATH/bin/subfinder -d $1 | $GOPATH/bin/dnsprobe -silent -f domain | $GOPATH/bin/httprobe | $GOPATH/bin/nuclei -t $tools_path/nuclei-templates/subdomain-takeover/detect-all-takeovers.yaml
     fi
 }
 
@@ -491,7 +491,7 @@ Recon_gowitness() {
     else
         # Run gowitness to screenshot those URLs
         mkdir -p $2
-        ~/go/bin/gowitness file --source=$1 --threads=4 --resolution="1200,750" --log-format=json --log-level=warn --timeout=60 --destination="$2"
+        $GOPATH/bin/gowitness file --source=$1 --threads=4 --resolution="1200,750" --log-format=json --log-level=warn --timeout=60 --destination="$2"
     fi
 }
 
@@ -500,7 +500,7 @@ Recon_hakrawler() {
     then
         echo -e "$purple[*] Example: Recon_hakrawler <subdomains.txt> <output file> ${color_off}"
     else
-        cat $1 | ~/go/bin/hakrawler $2 -scope=subs | tee $2
+        cat $1 | $GOPATH/bin/hakrawler $2 -scope=subs | tee $2
     fi
 }
 
@@ -509,7 +509,7 @@ Recon_ffuf() {
     then
         echo -e "$purple[*] Example: Recon_ffuf <path to wordlist> <URL> <output file> ${color_off}"
     else
-        ~/go/bin/ffuf -c -w $1 -u $2 -of $3
+        $GOPATH/bin/ffuf -c -w $1 -u $2 -of $3
     fi
 }
 
@@ -518,7 +518,7 @@ Recon_gobuster() {
     then
         echo -e "$purple[*] Example: Recon_gobuster <URL> <wordlist> <threads> <output file> ${color_off}"
     else
-        ~/go/bin/gobuster dir -u $1 -w $2 -t $3 -o $4
+        $GOPATH/bin/gobuster dir -u $1 -w $2 -t $3 -o $4
     fi
 }
 
