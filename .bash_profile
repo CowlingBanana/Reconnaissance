@@ -67,6 +67,7 @@ show_menu() {
     echo "  12. hakrawler"
     echo "  13. nuclei"
     echo "  14. dirsearch"
+    echo "  15. httpx"
     echo "  99. Install all of the tools above"
     echo "  100. Exit"
     echo -e "${color_off}"
@@ -130,6 +131,9 @@ read_choice() {
 
         14) print_installing_choice $choice
             install_dirsearch ;;
+
+        15) print_installing_choice $choice
+            install_httpx ;;
 
         99) print_installing_choice $choice
             install_all ;;
@@ -315,6 +319,11 @@ install_dirsearch() {
     pause
 }
 
+# Install httpx
+install_httpx() {
+    GO111MODULE=on go get -u -v github.com/projectdiscovery/httpx/cmd/httpx
+}
+
 # Installs all tools and dependencies
 install_all() {
     check_missing_programs
@@ -334,6 +343,7 @@ install_all() {
     install_hakrawler
     install_nuclei
     install_dirsearch
+    install_httpx
 }
 
 # This function creates a wordlist inside the wordlists directory
