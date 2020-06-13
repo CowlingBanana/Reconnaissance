@@ -13,7 +13,7 @@ package_manager=""
 # Change libpcap-dev to libpcap if using macosx to make sure naabu gets installed
 # Programs to install
 
-programs=(go git libpcap-dev libpcap)
+programs=(go git libpcap-dev libpcap unzip)
 
 wordlists=("https://github.com/danielmiessler/SecLists" "https://github.com/fuzzdb-project/fuzzdb" "https://github.com/swisskyrepo/PayloadsAllTheThings" "https://github.com/projectdiscovery/nuclei-templates.git")
 
@@ -68,6 +68,8 @@ show_menu() {
     echo "  13. nuclei"
     echo "  14. dirsearch"
     echo "  15. httpx"
+    echo "  16. hakrevdns"
+    echo "  17. aquatone"     
     echo "  99. Install all of the tools above"
     echo "  100. Exit"
     echo -e "${color_off}"
@@ -134,6 +136,12 @@ read_choice() {
 
         15) print_installing_choice $choice
             install_httpx ;;
+
+        16) print_installing_choice $choice
+            install_hakrevdns ;;    
+
+        17) print_installing_choice $choice
+            install_aquatone ;;                   
 
         99) print_installing_choice $choice
             install_all ;;
@@ -322,6 +330,27 @@ install_dirsearch() {
 # Install httpx
 install_httpx() {
     GO111MODULE=on go get -u -v github.com/projectdiscovery/httpx/cmd/httpx
+    pause
+}
+
+# Install hakrevdns
+install_hakrevdns() {
+    go get github.com/hakluke/hakrevdns
+    pause
+}
+
+# Install aquatone
+install_aquatone() {
+    if [[ $package_manager == "brew" ]]
+    then
+        wget https://github.com/michenriksen/aquatone/releases/download/v1.7.0/aquatone_macos_amd64_1.7.0.zip -P $tools_path/
+        unzip $tools_path/aquatone_macos_amd64_1.7.0.zip -d $tools_path/aquatone
+        pause
+    else
+        wget https://github.com/michenriksen/aquatone/releases/download/v1.7.0/aquatone_linux_amd64_1.7.0.zip -P $tools_path/
+        unzip $tools_path/aquatone_linux_amd64_1.7.0.zip -d $tools_path/aquatone
+        pause
+    fi
 }
 
 # Installs all tools and dependencies
@@ -344,6 +373,8 @@ install_all() {
     install_nuclei
     install_dirsearch
     install_httpx
+    install_hakrevdns
+    install_aquatone
 }
 
 # This function creates a wordlist inside the wordlists directory

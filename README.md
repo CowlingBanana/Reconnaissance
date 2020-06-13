@@ -61,3 +61,4 @@ Check for subdomain takeovers on bugcrowd.com
 * https://github.com/ffuf
 * https://github.com/hakluke/hakrawler
 * https://github.com/maurosoria/dirsearch
+* https://github.com/michenriksen/aquatone
