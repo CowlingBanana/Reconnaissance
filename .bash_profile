@@ -69,7 +69,7 @@ show_menu() {
     echo "  14. dirsearch"
     echo "  15. httpx"
     echo "  16. hakrevdns"
-    echo "  17. aquatone"     
+    echo "  17. gospider"     
     echo "  99. Install all of the tools above"
     echo "  100. Exit"
     echo -e "${color_off}"
@@ -141,7 +141,7 @@ read_choice() {
             install_hakrevdns ;;    
 
         17) print_installing_choice $choice
-            install_aquatone ;;                   
+            install_gospider ;;                   
 
         99) print_installing_choice $choice
             install_all ;;
@@ -339,18 +339,9 @@ install_hakrevdns() {
     pause
 }
 
-# Install aquatone
-install_aquatone() {
-    if [[ $package_manager == "brew" ]]
-    then
-        wget https://github.com/michenriksen/aquatone/releases/download/v1.7.0/aquatone_macos_amd64_1.7.0.zip -P $tools_path/
-        unzip $tools_path/aquatone_macos_amd64_1.7.0.zip -d $tools_path/aquatone
-        pause
-    else
-        wget https://github.com/michenriksen/aquatone/releases/download/v1.7.0/aquatone_linux_amd64_1.7.0.zip -P $tools_path/
-        unzip $tools_path/aquatone_linux_amd64_1.7.0.zip -d $tools_path/aquatone
-        pause
-    fi
+# Install gospider
+install_gospider() {
+    go get -u github.com/jaeles-project/gospider
 }
 
 # Installs all tools and dependencies
@@ -375,6 +366,7 @@ install_all() {
     install_httpx
     install_hakrevdns
     install_aquatone
+    install_gospider
 }
 
 # This function creates a wordlist inside the wordlists directory
