@@ -22,21 +22,31 @@ Copy the `.bash_profile` in your home directory (make sure you don't overwrite y
 
 `cp Reconnaissance/.bash_profile ~/.bash_profile`
 
-Activate the bash profile
+Activate the bash profile (temporary)
 
 `source ~/.bash_profile`
 
+or 
+
+Add the following to `~/.bashrc` or `~/.zshrc` depending on your shell (permanent)
+
+```shell
+if [ -f ~/.bash_profile ]; then
+    . ~/.bash_profile
+fi
+```
+
 Install all the tools required
 
-`install_tools` (Recommended) or `install_all` (Blindly install all the tools)
+`install_tools` (Recommended)
 
-Start your recon
+Start your recon (Example)
 
-Run most of the recon tools on hackerone.com
+Run most of the recon tools on hackerone.com (Example)
 
 `Recon_all hackerone.com`
 
-Check for subdomain takeovers on bugcrowd.com
+Check for subdomain takeovers on bugcrowd.com (Example)
 
 `Recon_subdomain_takeover bugcrowd.com`
 

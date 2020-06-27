@@ -51,27 +51,27 @@ show_menu() {
     ${color_off}"
 
     echo -e "${green}"
-    echo ""
-    echo "  0. Install dependencies (Go, Git, libpcap-dev, install wordlists, create tools dir) *Recommended*"
-    echo "  1. amass"
-    echo "  2. subfinder"
-    echo "  3. httprobe"
-    echo "  4. shuffledns"
-    echo "  5. dnsprobe"
-    echo "  6. naabu"
-    echo "  7. gowitness"
-    echo "  8. aquatone"
-    echo "  9. subjack"
-    echo "  10. gobuster"
-    echo "  11. fuff"
-    echo "  12. hakrawler"
-    echo "  13. nuclei"
-    echo "  14. dirsearch"
-    echo "  15. httpx"
-    echo "  16. hakrevdns"
-    echo "  17. gospider"     
-    echo "  99. Install all of the tools above"
-    echo "  100. Exit"
+    echo -e ""
+    echo -e "  0. Install dependencies (Go, Git, libpcap-dev, install wordlists, create tools dir) *Recommended*"
+    echo -e "  1. amass"
+    echo -e "  2. subfinder"
+    echo -e "  3. httprobe"
+    echo -e "  4. shuffledns"
+    echo -e "  5. dnsprobe"
+    echo -e "  6. naabu"
+    echo -e "  7. gowitness"
+    echo -e "  8. aquatone"
+    echo -e "  9. subjack"
+    echo -e "  10. gobuster"
+    echo -e "  11. fuff"
+    echo -e "  12. hakrawler"
+    echo -e "  13. nuclei"
+    echo -e "  14. dirsearch"
+    echo -e "  15. httpx"
+    echo -e "  16. hakrevdns"
+    echo -e "  17. gospider"     
+    echo -e "  99. Install all of the tools above"
+    echo -e "  100. Exit"
     echo -e "${color_off}"
 }
 
@@ -406,7 +406,7 @@ create_wordlists_dir() {
 
 pause() {
     # ZSH/OSX does not take 'read "<enter string here>" var' on same line
-    echo "${cyan}Press [Enter] key to continue...${color_off}"
+    echo -e "${cyan}Press [Enter] key to continue...${color_off}"
     read  ENTERKEY
 }
 
@@ -486,7 +486,7 @@ Recon_all() {
         then
             mkdir -p $2
         else
-            echo ""
+            echo -e ""
         fi
         
         $GOPATH/bin/gowitness file --source=alive_URLs.txt --threads=4 --resolution="1200,750" --log-format=json --log-level=warn --timeout=60 --destination="$2"
