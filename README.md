@@ -1,5 +1,7 @@
 # Recon Profile
 
+## Authors: memN0ps and Phish aka dunderhay
+
 This is a basic `.bash_profile` which allows you to install tools of your choice and perform subdomain recon against a target of your choice.
 
 I made this to work on my bash scripting skills, learn more about subdomain recon and contribute to the community. There is always room for improvements, so feel free to modify according to your needs. It's not perfect, but its a start.
@@ -72,3 +74,5 @@ Check for subdomain takeovers on bugcrowd.com (Example)
 * https://github.com/hakluke/hakrawler
 * https://github.com/maurosoria/dirsearch
 * https://github.com/michenriksen/aquatone
+* https://github.com/sqlmapproject/sqlmap
+* https://github.com/rapid7/metasploit-framework

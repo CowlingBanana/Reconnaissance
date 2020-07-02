@@ -2,10 +2,34 @@
 
 #Author memN0ps and Phish aka dunderhay
 
-# Tested on Linux/Mac OSX using Vim and Visual Code
-
 #Export the GOPATH in case it has not been done
 export GOPATH=$HOME/go
+
+# Change the path to your preference, tools directory will be created if it does not exist
+tools_path="$HOME/tools"
+
+# Alias
+# Go tools alias
+alias amass='$GOPATH/bin/amass'
+alias subfinder='$GOPATH/bin/subfinder'
+alias httprobe='$GOPATH/bin/httprobe'
+alias shuffledns='$GOPATH/bin/shuffledns'
+alias dnsprobe='$GOPATH/bin/dnsprobe'
+alias naabu='$GOPATH/bin/naabu'
+alias gowitness='$GOPATH/bin/gowitness'
+alias aquatone='$GOPATH/bin/aquatone'
+alias subjack='$GOPATH/bin/subjack'
+alias gobuster='$GOPATH/bin/gobuster'
+alias ffuf='$GOPATH/bin/ffuf'
+alias hakrawler='$GOPATH/bin/hakrawler'
+alias nuclei='$GOPATH/bin/nuclei'
+alias httpx='$GOPATH/bin/httpx'
+alias hakrevdns='$GOPATH/bin/hakrevdns'
+alias gospider='$GOPATH/bin/gospider'
+
+# Python tools alias
+alias dirsearch='$tools_path/dirsearch/dirsearch.py'
+alias sqlmap='$tools_path/sqlmap-dev/sqlmap.py'
 
 # Used get_package_manager just incase it is needed for anything
 package_manager=""
@@ -13,12 +37,9 @@ package_manager=""
 # Change libpcap-dev to libpcap if using macosx to make sure naabu gets installed
 # Programs to install
 
-programs=(go git libpcap-dev libpcap unzip)
+programs=(go git libpcap-dev libpcap unzip curl)
 
 wordlists=("https://github.com/danielmiessler/SecLists" "https://github.com/fuzzdb-project/fuzzdb" "https://github.com/swisskyrepo/PayloadsAllTheThings" "https://github.com/projectdiscovery/nuclei-templates.git")
-
-# Change the path to your preference, tools directory will be created if it does not exist
-tools_path="$HOME/tools"
 
 # Change the path preference, wordlists directory will be created if does not exist
 wordlists_path="$HOME/tools/wordlists"
@@ -63,13 +84,15 @@ show_menu() {
     echo -e "  8. aquatone"
     echo -e "  9. subjack"
     echo -e "  10. gobuster"
-    echo -e "  11. fuff"
+    echo -e "  11. ffuf"
     echo -e "  12. hakrawler"
     echo -e "  13. nuclei"
     echo -e "  14. dirsearch"
     echo -e "  15. httpx"
     echo -e "  16. hakrevdns"
     echo -e "  17. gospider"     
+    echo -e "  18. sqlmap"
+    echo -e "  19. metasploit"   
     echo -e "  99. Install all of the tools above"
     echo -e "  100. Exit"
     echo -e "${color_off}"
@@ -141,7 +164,13 @@ read_choice() {
             install_hakrevdns ;;    
 
         17) print_installing_choice $choice
-            install_gospider ;;                   
+            install_gospider ;;  
+        
+        18) print_installing_choice $choice
+            install_sqlmap ;;                 
+        
+        19) print_installing_choice $choice
+            install_metasploit ;; 
 
         99) print_installing_choice $choice
             install_all ;;
@@ -342,6 +371,21 @@ install_hakrevdns() {
 # Install gospider
 install_gospider() {
     go get -u github.com/jaeles-project/gospider
+    pause
+}
+
+# Install sqlmap
+install_sqlmap() {
+    git -C $tools_path clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
+    pause
+}
+
+# Install metasploit framework
+install_metasploit() {
+    curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > $tools_path/msfinstall
+    chmod 755 $tools_path/msfinstall 
+    $tools_path/msfinstall
+    pause
 }
 
 # Installs all tools and dependencies
@@ -367,6 +411,8 @@ install_all() {
     install_hakrevdns
     install_aquatone
     install_gospider
+    install_sqlmap
+    install_metasploit
 }
 
 # This function creates a wordlist inside the wordlists directory
