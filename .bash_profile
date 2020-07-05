@@ -31,13 +31,16 @@ alias gospider='$GOPATH/bin/gospider'
 alias dirsearch='$tools_path/dirsearch/dirsearch.py'
 alias sqlmap='$tools_path/sqlmap-dev/sqlmap.py'
 
+# Other tools
+alias masscan='$tools_path/masscan/bin/masscan'
+
 # Used get_package_manager just incase it is needed for anything
 package_manager=""
 
-# Change libpcap-dev to libpcap if using macosx to make sure naabu gets installed
+# Change libpcap-dev to (Debian distro: libpcap-dev, MacOS: libpcap, REHL: libpcap-devel)
 # Programs to install
 
-programs=(go git libpcap-dev libpcap unzip curl)
+programs=(go git curl unzip gcc make libpcap-dev libpcap libpcap-devel)
 
 wordlists=("https://github.com/danielmiessler/SecLists" "https://github.com/fuzzdb-project/fuzzdb" "https://github.com/swisskyrepo/PayloadsAllTheThings" "https://github.com/projectdiscovery/nuclei-templates.git")
 
@@ -92,7 +95,8 @@ show_menu() {
     echo -e "  16. hakrevdns"
     echo -e "  17. gospider"     
     echo -e "  18. sqlmap"
-    echo -e "  19. metasploit"   
+    echo -e "  19. metasploit"
+    echo -e "  20. masscan"     
     echo -e "  99. Install all of the tools above"
     echo -e "  100. Exit"
     echo -e "${color_off}"
@@ -171,6 +175,9 @@ read_choice() {
         
         19) print_installing_choice $choice
             install_metasploit ;; 
+        
+        20) print_installing_choice $choice
+            install_masscan ;;
 
         99) print_installing_choice $choice
             install_all ;;
@@ -189,7 +196,6 @@ check_missing_programs() {
         if [[ -n "$(command -v $p)" ]]
         then
             echo -e "${yellow}[+] $p is installed ${color_off}"
-            pause
         else
             echo -e "${yellow}[-] $p is not installed ${color_off}"
             echo -e "${yellow}[+] Installing $p ${color_off}"
@@ -205,36 +211,30 @@ install_missing_programs() {
     if [[ $package_manager == "apt" ]]
     then
         sudo apt install -y $p
-        pause
 
     # Brew
     elif [[ $package_manager == "brew" ]]
     then
         brew install $p
-        pause
 
     #DNF
     elif [[ $package_manager == "dnf" ]]
     then
         sudo dnf install -y $p
-        pause
 
     # Yum
     elif [[ $package_manager == "yum" ]]
     then
         sudo yum install -y $p
-        pause
 
     # PKG
     elif [[ $package_manager == "pkg" ]]
     then
         sudo pkg install -y $p
-        pause
 
     # Error
     else
         echo -e "${red}[-] Error unable to find package manager ${color_off}"
-        pause
     fi
 }
 
@@ -275,109 +275,91 @@ get_package_manager() {
 # Installs amass
 install_amass() {
     GO111MODULE=on go get -u -v github.com/OWASP/Amass/v3/...
-    pause
 }
 
 # Installs subfinder
 install_subfinder() {
     go get -u -v github.com/projectdiscovery/subfinder/cmd/subfinder
-    pause
 }
 
 # Installs httprobe
 install_httprobe() {
     go get -u -v github.com/tomnomnom/httprobe
-    pause
 }
 
 # Installs shuffledns
 install_shuffledns() {
     GO111MODULE=on go get -u -v github.com/projectdiscovery/shuffledns/cmd/shuffledns
-    pause
 }
 
 # Installs dnsprobe
 install_dnsprobe() {
     GO111MODULE=on go get -u -v github.com/projectdiscovery/dnsprobe
-    pause
 }
 
 # Installs naabu
 install_naabu() {
     go get -u -v github.com/projectdiscovery/naabu/cmd/naabu
-    pause
 }
 
 # Installs gowitness
 install_gowitness() {
     go get -u -v github.com/sensepost/gowitness
-    pause
 }
 
 # Installs aquatone
 install_aquatone() {
     go get -u -v github.com/michenriksen/aquatone
-    pause
 }
 
 #Installs subjack
 install_subjack() {
     go get -u -v github.com/haccer/subjack
-    pause
 }
 
 # Installs gobuster
 install_gobuster() {
     go get -u -v github.com/OJ/gobuster
-    pause
 }
 
 # Install ffuf
 install_ffuf() {
     go get -u -v github.com/ffuf/ffuf
-    pause
 }
 
 # Install hakrawler
 install_hakrawler() {
     go get -u -v github.com/hakluke/hakrawler
-    pause
 }
 
 # Install nuclei
 install_nuclei() {
     GO111MODULE=on go get -u -v github.com/projectdiscovery/nuclei/cmd/nuclei
-    pause
 }
 
 # Install dirsearch
 install_dirsearch() {
     git -C $tools_path clone https://github.com/maurosoria/dirsearch
-    pause
 }
 
 # Install httpx
 install_httpx() {
     GO111MODULE=on go get -u -v github.com/projectdiscovery/httpx/cmd/httpx
-    pause
 }
 
 # Install hakrevdns
 install_hakrevdns() {
     go get github.com/hakluke/hakrevdns
-    pause
 }
 
 # Install gospider
 install_gospider() {
     go get -u github.com/jaeles-project/gospider
-    pause
 }
 
 # Install sqlmap
 install_sqlmap() {
     git -C $tools_path clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
-    pause
 }
 
 # Install metasploit framework
@@ -385,7 +367,12 @@ install_metasploit() {
     curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > $tools_path/msfinstall
     chmod 755 $tools_path/msfinstall 
     $tools_path/msfinstall
-    pause
+}
+
+# Install masscan
+install_masscan() {
+    git -C $tools_path clone https://github.com/robertdavidgraham/masscan
+    make -C $tools_path/masscan/
 }
 
 # Installs all tools and dependencies
@@ -413,17 +400,16 @@ install_all() {
     install_gospider
     install_sqlmap
     install_metasploit
+    install_masscan
 }
 
 # This function creates a wordlist inside the wordlists directory
 install_wordlists() {                
     create_wordlists_dir
-    pause
 
     for p in "${wordlists[@]}"
     do
         git -C $wordlists_path clone $p
-        pause
     done
 }
 

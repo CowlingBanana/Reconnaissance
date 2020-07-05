@@ -76,3 +76,4 @@ Check for subdomain takeovers on bugcrowd.com (Example)
 * https://github.com/michenriksen/aquatone
 * https://github.com/sqlmapproject/sqlmap
 * https://github.com/rapid7/metasploit-framework
+* https://github.com/robertdavidgraham/masscan
